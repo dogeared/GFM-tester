@@ -22,6 +22,33 @@ Feature: Addition
     Then the result should be 120 on the screen
 ```
 
+#### 2: Run and get the template for a step definition file
+peanut
+
+```
+Running features
+
+...
+
+Successful: 0
+Failed: 0
+Pending: 0
+Skipped: 0
+Unimplemented: 3
+
+Given(/^I have entered (\d*\.)?(\d+) into the calculator$/, function(step, arg) {
+  step.pending();
+});
+
+When(/^I press add $/, function(step) {
+  step.pending();
+});
+
+Then(/^the result should be (\d*\.)?(\d+) on the screen$/, function(step, arg) {
+  step.pending();
+});
+```
+
 #### 2: Write a step definition in Javascript
 
 ```javascript
