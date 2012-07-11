@@ -9,7 +9,7 @@
 
 #### 1: Describe behavior in plain text
 
-```
+```cucumber
 Feature: Addition
   In order to avoid silly mistakes
   As a match idiot
@@ -25,7 +25,7 @@ Feature: Addition
 #### 2: Run and get the template for a step definition file
 peanut
 
-```
+```bash
 Running features
 
 ...
@@ -49,21 +49,76 @@ Then(/^the result should be (\d*\.)?(\d+) on the screen$/, function(step, arg) {
 });
 ```
 
-#### 2: Write a step definition in Javascript
+#### 3: Write a step definition in Javascript
 
 ```javascript
-for (var i=0; i<10; i++) {
-  console.log(i)
-}
+var assert = require('assert')
+var calculator = require('../support/calculator')
+
+Given(/^I have entered (\d*\.)?(\d+) into the calculator$/, function(step, arg) {
+  calculator.push(parseInt(arg))
+  step.done()
+})
+
+When(/^I press add $/, function(step) {
+  var self = this
+  calculator.add(function(err, sum) {
+    self.sum = sum
+    step.done()
+  })
+})
+
+Then(/^the result should be (\d*\.)?(\d+) on the screen$/, function(step, arg) {
+  assert.equal(this.sum, arg)
+  step.done()
+})
 ```
 
-#### 3: Run and watch it fail
+#### 4: Run and watch it fail
 
-#### 4: Write code to make the test pass
+```bash
+Running features
 
-#### 5: Run again and see the step pass
+Error: Cannot find module '../support/calculator'
+....
+```
 
-#### 6: Run again until green like a cuke
+#### 5: Write code to make the test pass
+
+```javascript
+module.exports = (function() {
+  var args = []
+
+  return {
+    push: function(arg) {
+      args.push(arg)
+    },
+    add: function(callback) {
+      try {
+        var result = 0
+        for (var i=0; i<args.length; i++) result+=args[i]
+        callback(null, result)
+      } catch (err) {
+        callback(err)
+      }
+    }
+  }
+})()
+```
+
+#### 6: Run again and see the step pass
+
+```bash
+Running features
+
+....
+
+Successful: 4
+Failed: 0
+Pending: 0
+Skipped: 0
+Unimplemented: 0
+```
 
 #### 7: Repeat 1 - 6 until the money runs out
 
