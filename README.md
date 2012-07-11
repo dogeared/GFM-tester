@@ -9,7 +9,7 @@
 
 #### 1: Describe behavior in plain text
 
-```cucumber
+```
 Feature: Addition
   In order to avoid silly mistakes
   As a match idiot
