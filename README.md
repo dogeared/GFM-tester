@@ -116,7 +116,10 @@ Running features
 
 ....
 
-<font color="green">Successful: 4</font>
+<font color="green">
+Successful: 4
+</font>
+
 Failed: 0
 Pending: 0
 Skipped: 0
