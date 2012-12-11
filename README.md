@@ -90,6 +90,24 @@ The following examples use these database tables as examples:
 |  7 |       4 | Comment 7 | 2012-12-11 |
 |  8 |       4 | Comment 8 | 2012-12-11 |
 
+Given this setup:
+    
+    var FastLegSBase = require('FastLegS');
+    
+    // gonna use PostgreSQL
+    var FastLegS = new FastLegSBase('pg');
+    
+    var connectionParams = {
+      user: 'shes'
+    , password: 'got'
+    , database: 'legs'
+    , host: 'localhost'
+    , port: 5432
+    }
+    
+    FastLegS.connect(connectionParams);
+
+The following are examples of basic CRUD operations:
 
 ## Create
 
