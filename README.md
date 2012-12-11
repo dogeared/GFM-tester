@@ -70,17 +70,25 @@ The following examples use these database tables as examples:
 
 ### posts
 
-| id   | title        | blurb        | body        | published   |
-|------|--------------|--------------|-------------|-------------|
-| 1    | Some Title 1 | Some blurb 1 | Some body 1 | false       |
-| 2    | Some Title 1 | Some blurb 2 | Some body 2 | true        |
-| 3    | Some Title 1 | Some blurb 3 | Some body 3 | false       |
-| 4    | Some Title 1 | Some blurb 4 | Some body 4 | true        |
+ | id   | title        | blurb        | body        | published   |
+ |------|--------------|--------------|-------------|-------------|
+ | 1    | Some Title 1 | Some blurb 1 | Some body 1 | false       |
+ | 2    | Some Title 1 | Some blurb 2 | Some body 2 | true        |
+ | 3    | Some Title 1 | Some blurb 3 | Some body 3 | false       |
+ | 4    | Some Title 1 | Some blurb 4 | Some body 4 | true        |
 
-|Table Header 1|Table Header 2|
-|--------------|--------------|
-|Content       |Cntent        |
-|Content       |Content       |
+### comments
+
+| id | post_id | comment   | created_at |
+|----|---------|-----------|------------|
+|  1 |       1 | Comment 1 | 2012-12-11 |
+|  2 |       1 | Comment 2 | 2012-12-11 |
+|  3 |       2 | Comment 3 | 2012-12-11 |
+|  4 |       2 | Comment 4 | 2012-12-11 |
+|  5 |       3 | Comment 5 | 2012-12-11 |
+|  6 |       3 | Comment 6 | 2012-12-11 |
+|  7 |       4 | Comment 7 | 2012-12-11 |
+|  8 |       4 | Comment 8 | 2012-12-11 |
 
 
 ## Create
