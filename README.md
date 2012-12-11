@@ -1,162 +1,90 @@
+[![Build Status](https://secure.travis-ci.org/didit-tech/FastLegS.png)](http://travis-ci.org/didit-tech/FastLegS)
+#FastLegS
 
-# peanut
+PostgreSQL ORM on top of node-postgres.
 
-  node.js cucumber implementation for the birds
+##Installation
 
-  npm install peanut -g
+    npm install FastLegS
 
-# quickstart
+## Quickstart
 
-#### 1: Describe behavior in plain text
+**NOTE:** As of version```0.2.0```, both PostgreSQL and MySQL are supported. You indicate which database you are using at object instantiation time. All other operations and interfaces behave the same as older versions.
 
-```cucumber
-Feature: Addition
-  In order to avoid silly mistakes
-  As a match idiot
-  I want to be told the sum of two numbers
+### Setup for versions < ```0.2.0```
 
-  Scenario: Add two numbers
-    Given I have entered 50 into the calculator
-    and I have entered 70 into the calculator
-    When I press add
-    Then the result should be 120 on the screen
-```
+    var FastLegS = require('FastLegS');
+    ...
+    FastLegS.connect(connectionParams);
+    ...
 
-#### 2: Run and get the template for a step definition file
-peanut features/example.feature
+### Setup for versions >= ```0.2.0```   
 
-```bash
-Running features
+### MySQL:
 
-...
+    var FastLegSBase = require('FastLegS');
+    var FastLegS = new FastLegSBase('mysql');
+    ...
+    FastLegS.connect(connectionParams);
+    ...
 
-Successful: 0
-Failed: 0
-Pending: 0
-Skipped: 0
-Unimplemented: 3
+### PostgreSQL:
 
-Given(/^I have entered (\d*\.)?(\d+) into the calculator$/, function(step, arg) {
-  step.pending();
-});
+    var FastLegSBase = require('FastLegS');
+    var FastLegS = new FastLegSBase('pg');
+    ...
+    FastLegS.connect(connectionParams);
+    ...
 
-When(/^I press add$/, function(step) {
-  step.pending();
-});
+### Example:
 
-Then(/^the result should be (\d*\.)?(\d+) on the screen$/, function(step, arg) {
-  step.pending();
-});
-```
+    var FastLegSBase = require('FastLegS');
 
-#### 3: Write a step definition in Javascript
+    // gonna use PostgreSQL
+    var FastLegS = new FastLegSBase('pg');
 
-```javascript
-var assert = require('assert')
-var calculator = require('../support/calculator')
-
-Given(/^I have entered (\d*\.)?(\d+) into the calculator$/, function(step, arg) {
-  calculator.push(parseInt(arg))
-  step.done()
-})
-
-When(/^I press add $/, function(step) {
-  step.pending()
-})
-
-Then(/^the result should be (\d*\.)?(\d+) on the screen$/, function(step, arg) {
-  step.pending()
-})
-```
-
-#### 4: Run and watch it fail
-peanut features/example.feature
-
-```bash
-Running features
-
-Error: Cannot find module '../support/calculator'
-....
-```
-
-#### 5: Write code to make the test pass
-
-```javascript
-module.exports = (function() {
-  var args = []
-
-  return {
-    push: function(arg) {
-      args.push(arg)
+    var connectionParams = {
+      user: 'shes'
+    , password: 'got'
+    , database: 'legs'
+    , host: 'localhost'
+    , port: 5432
     }
-  }
-})()
-```
 
-#### 6: Run again and see the step pass
-peanut features/example.feature
+    FastLegS.connect(connectionParams);
 
-```bash
-Running features
+    var Post = FastLegS.Base.extend({
+      tableName: 'posts',
+      primaryKey: 'id'
+    });
 
-....
+    Post.create({ title: 'Some Title 1', body: 'Some body 1' }, function(err, results) {
+      Post.find({ 'title.ilike': '%title%' }, { only: ['id', 'body'] }, function(err, post) {
+        // Hooray!
+      });
+    });
 
-Successful: 2
-Failed: 0
-Pending: 1
-Skipped: 1
-Unimplemented: 0
-```
+#The Full Monty
 
-#### 7: Repeat 2 - 6 until green like a cuke
-peanut features/example.feature
+The following examples use these database tables as examples:
 
-```bash
-Running features
+### posts
 
-....
+ | id   | title        | blurb        | body        | published   |
+ |------|--------------|--------------|-------------|-------------|
+ | 1    | Some Title 1 | Some blurb 1 | Some body 1 | false       |
+ | 2    | Some Title 1 | Some blurb 2 | Some body 2 | true        |
+ | 3    | Some Title 1 | Some blurb 3 | Some body 3 | false       |
+ | 4    | Some Title 1 | Some blurb 4 | Some body 4 | true        |
 
-<font color="green">
-Successful: 4
-</font>
 
-Failed: 0
-Pending: 0
-Skipped: 0
-Unimplemented: 0
-```
+## Create
 
-#### 8: Repeat 1 - 7 until the money runs out
 
-# run all tests
+#Contributors
 
-    peanut
-
-# help
-
-    peanut -h
-
-## License
-
-(The MIT License)
-
-Copyright (c) 2011 Didit &lt;developers@didit.com&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+* Thad Clay ([thadclay](https://github.com/thadclay))
+* Jan Paul Erkelens ([jperkelens](https://github.com/jperkelens))
+* Micah Silverman ([dogeared](https://github.com/dogeared))
+* Rob Malko ([malkomalko](https://github.com/malkomalko))
+* Jim Drannbauer ([excellentdrums](https://github.com/excellentdrums))
