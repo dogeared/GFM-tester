@@ -18,7 +18,7 @@ PostgreSQL ORM on top of node-postgres.
     FastLegS.connect(connectionParams);
     ...
 
-### Setup for versions >= ```0.2.0```   
+### Setup for versions >= ```0.2.0```
 
 ### MySQL:
 
@@ -91,23 +91,33 @@ The following examples use these database tables as examples:
 |  8 |       4 | Comment 8 | 2012-12-11 |
 
 Given this setup:
-    
+
     var FastLegSBase = require('FastLegS');
-    
+
     // gonna use PostgreSQL
     var FastLegS = new FastLegSBase('pg');
-    
-    var connectionParams = { 
-      user: 'shes', password: 'got', 
+
+    var connectionParams = {
+      user: 'shes', password: 'got',
       database: 'legs', host: 'localhost', port: 5432
     }
-    
+
     FastLegS.connect(connectionParams);
-    
+
     var callback = function(err, results) {
       console.dir(err);
       console.dir(results);
     }
+    
+    var Comment = FastLegS.Base.extend({
+      tableName: 'comments',
+      primaryKey: 'id'
+    });
+    
+    var Post = FastLegS.Base.extend({
+      tableName: 'posts',
+      primaryKey: 'id'
+    });
 
 The following are examples of basic CRUD operations:
 
@@ -116,7 +126,7 @@ The following are examples of basic CRUD operations:
 Calls to ```create``` can take an object or an array of objects.
 
     Post.create(
-      { id: 5, title: 'Some Title 5', body: 'Some body 5' }, 
+      { id: 5, title: 'Some Title 5', body: 'Some body 5' },
       callback
     )
 
@@ -126,7 +136,7 @@ Calls to ```create``` can take an object or an array of objects.
       callback
     )
 
-The ```results``` passed to the callback are different depending on the database. 
+The ```results``` passed to the callback are different depending on the database.
 
 In the case of PostgreSQL, the ```results``` will be an object of the form:
 
@@ -143,13 +153,13 @@ In the case of PostgreSQL, the ```results``` will be an object of the form:
 
 In the case of MySQL, the ```results``` will be an object of the form:
 
-    { 
+    {
       fieldCount: 0,
       affectedRows: 1,
       insertId: 0,
       serverStatus: 2,
       warningCount: 0,
-      message: '' 
+      message: ''
     }
 
 ##Read
@@ -158,13 +168,20 @@ The various forms of the ```find``` command are very flexible. We'll present a f
 
 ####All:
 
-find:
-
     Post.find({}, callback)
-    
+
 outputs:
 
-    [ { id: 5,
+    [ 
+      { id: 1,
+        title: 'Some Title 1',
+        blurb: null,
+        body: 'Some body 1',
+        published: null,
+        created_at: null,
+        updated_at: null },
+      ...
+      { id: 5,
         title: 'Some Title 5',
         blurb: null,
         body: 'Some body 5',
@@ -184,29 +201,26 @@ outputs:
         body: 'Some body 7',
         published: null,
         created_at: null,
-        updated_at: null } ]
+        updated_at: null } 
+    ]
 
 ####By primary key:
-
-find:
 
     Post.find(6, callback)
 
 outputs:
 
-    { 
+    {
       id: 6,
       title: 'Some Title 6',
       blurb: null,
       body: 'Some body 6',
       published: null,
       created_at: null,
-      updated_at: null 
+      updated_at: null
     }
-    
+
 ####Only show some fields:
-    
-find:
 
     Post.find(6, {only: ['id','title']}, callback)
 
@@ -228,13 +242,11 @@ outputs:
 
 ####Count:
 
-find:
-
     Post.find({}, {count: true}, callback)
 
 outputs:
 
-    { count: 3 }
+    { count: 7 }
 
 ##Update
 
@@ -247,10 +259,71 @@ outputs:
 ##Delete
 
     Post.destroy({ 'id.in': [5, 7]}, callback)
-    
+    Post.truncate(callback)
+
 ##A Taste of Relationships
 
+You can call out relationships when you extend FastLegS.Base:
 
+    var Post = FastLegS.Base.extend({
+      tableName: 'posts',
+      primaryKey: 'id',
+      many: [
+        { 'comments': Comment, joinOn: 'post_id' }
+      ]
+    });
+    
+You can then create complex object relationships with join logic:
+
+    Post.find(
+      {}, 
+      { include: { comments: { only: ['id', 'comment'] } } },
+      callback
+    )
+
+outputs:
+
+    [
+      {
+          body: 'Some body 1',
+          title: 'Some Title 1',
+          id: 1,
+          updated_at: null,
+          published: false,
+          blurb: 'Some blurb 1',
+          created_at: null,
+          comments: [
+              {
+                  id: 1,
+                  comment: 'Comment 1'
+              },
+              {
+                  id: 2,
+                  comment: 'Comment 2'
+              }
+          ]
+      },
+      {
+          body: 'Some body 2',
+          title: 'Some Title 2',
+          id: 2,
+          updated_at: null,
+          published: true,
+          blurb: null,
+          created_at: null,
+          comments: [
+              {
+                  id: 3,
+                  comment: 'Comment 3'
+              },
+              {
+                  id: 4,
+                  comment: 'Comment 4'
+              }
+          ]
+      },
+      ...
+    ]
 
 ##ToDo
 
