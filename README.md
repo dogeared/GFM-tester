@@ -103,27 +103,29 @@ Given this setup:
     }
     
     FastLegS.connect(connectionParams);
+    
+    var callback = function(err, results) {
+      console.dir(err);
+      console.dir(results);
+    }
 
 The following are examples of basic CRUD operations:
 
-## Create
+##Create
 
 Calls to ```create``` can take an object or an array of objects.
 
-    Post.create({ id: 5, title: 'Some Title 5', body: 'Some body 5' }, function(err, results) {
-      console.dir(err);
-      console.dir(results);
-    })
-    
+    Post.create(
+      { id: 5, title: 'Some Title 5', body: 'Some body 5' }, 
+      callback
+    )
+
     Post.create(
       [{ id: 6, title: 'Some Title 6', body: 'Some body 6' },
        { id: 7, title: 'Some Title 7', body: 'Some body 7' }],
-      function(err, results) {
-        console.dir(err);
-        console.dir(results);
-      }
+      callback
     )
-    
+
 The ```results``` passed to the callback are different depending on the database. 
 
 In the case of PostgreSQL, the ```results``` will be an object of the form:
@@ -149,7 +151,37 @@ In the case of MySQL, the ```results``` will be an object of the form:
       warningCount: 0,
       message: '' 
     }
+
+##Read
+
+The various forms of the ```find``` command are very flexible. We'll present a few of them here.
+
+####By primary key
+
+find:
+
+    Post.find(6, callback)
+
+returns:
+
+    { 
+      id: 6,
+      title: 'Some Title 6',
+      blurb: null,
+      body: 'Some body 6',
+      published: null,
+      created_at: null,
+      updated_at: null 
+    }
     
+find:
+
+    Post.find(6, {only: ['id','title']}, callback)
+
+returns:
+
+    { id: 6, title: 'Some Title 6' }
+
 ##ToDo
 
 Watch for updates to examples in the near future to show features like relationships and advanced queries.
