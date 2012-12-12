@@ -97,12 +97,9 @@ Given this setup:
     // gonna use PostgreSQL
     var FastLegS = new FastLegSBase('pg');
     
-    var connectionParams = {
-      user: 'shes'
-    , password: 'got'
-    , database: 'legs'
-    , host: 'localhost'
-    , port: 5432
+    var connectionParams = { 
+      user: 'shes', password: 'got', 
+      database: 'legs', host: 'localhost', port: 5432
     }
     
     FastLegS.connect(connectionParams);
@@ -111,6 +108,19 @@ The following are examples of basic CRUD operations:
 
 ## Create
 
+Create can take an object or an array of objects.
+
+    Post.create({ id: 5, title: 'Some Title 5', body: 'Some body 5' }, function(err, results) {
+    
+    })
+    
+    Post.create(
+      [{ id: 6, title: 'Some Title 6', body: 'Some body 6' },
+       { id: 7, title: 'Some Title 7', body: 'Some body 7' }],
+      function(err, results) {
+    
+      }
+    )
 
 #Contributors
 
