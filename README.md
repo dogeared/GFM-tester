@@ -293,14 +293,8 @@ outputs:
           blurb: 'Some blurb 1',
           created_at: null,
           comments: [
-              {
-                  id: 1,
-                  comment: 'Comment 1'
-              },
-              {
-                  id: 2,
-                  comment: 'Comment 2'
-              }
+              { id: 1, comment: 'Comment 1' },
+              { id: 2, comment: 'Comment 2' }
           ]
       },
       {
@@ -312,18 +306,17 @@ outputs:
           blurb: null,
           created_at: null,
           comments: [
-              {
-                  id: 3,
-                  comment: 'Comment 3'
-              },
-              {
-                  id: 4,
-                  comment: 'Comment 4'
-              }
+              { id: 3, comment: 'Comment 3' },
+              { id: 4, comment: 'Comment 4' }
           ]
       },
       ...
     ]
+
+##Summary
+
+The tests are an excellent reference for the various modifiers and syntactic
+sugar you can use in FastLegS.
 
 ##ToDo
 
