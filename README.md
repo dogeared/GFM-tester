@@ -7,7 +7,7 @@ PostgreSQL ORM on top of node-postgres.
 
     npm install FastLegS
 
-## Quickstart
+##Quickstart
 
 **NOTE:** As of version```0.2.0```, both PostgreSQL and MySQL are supported. You indicate which database you are using at object instantiation time. All other operations and interfaces behave the same as older versions.
 
@@ -108,24 +108,48 @@ The following are examples of basic CRUD operations:
 
 ## Create
 
-Create can take an object or an array of objects.
+Calls to ```create``` can take an object or an array of objects.
 
     Post.create({ id: 5, title: 'Some Title 5', body: 'Some body 5' }, function(err, results) {
-    
+      console.dir(err);
+      console.dir(results);
     })
     
     Post.create(
       [{ id: 6, title: 'Some Title 6', body: 'Some body 6' },
        { id: 7, title: 'Some Title 7', body: 'Some body 7' }],
       function(err, results) {
-    
+        console.dir(err);
+        console.dir(results);
       }
     )
+    
+The ```results``` passed to the callback are different depending on the database. 
 
-#Contributors
+In the case of PostgreSQL, the ```results``` will be an object of the form:
 
-* Thad Clay ([thadclay](https://github.com/thadclay))
-* Jan Paul Erkelens ([jperkelens](https://github.com/jperkelens))
-* Micah Silverman ([dogeared](https://github.com/dogeared))
-* Rob Malko ([malkomalko](https://github.com/malkomalko))
-* Jim Drannbauer ([excellentdrums](https://github.com/excellentdrums))
+    {
+      rows: [{ id: 5,
+             title: 'Some Title 5',
+             blurb: null,
+             body: 'Some body 5',
+             published: null }],
+      command: INSERT,
+      rowCount: 1,
+      oid: 0
+    }
+
+In the case of MySQL, the ```results``` will be an object of the form:
+
+    { 
+      fieldCount: 0,
+      affectedRows: 1,
+      insertId: 0,
+      serverStatus: 2,
+      warningCount: 0,
+      message: '' 
+    }
+    
+##ToDo
+
+Watch for updates to examples in the near future to show features like relationships and advanced queries.
