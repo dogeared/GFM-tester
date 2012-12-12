@@ -219,8 +219,13 @@ outputs:
     Post.find({'title.like': 'Some%'}, callback)
     Post.find({'id.in': [6, 7]}, callback)
     Post.find({'id.nin': [6]}, callback)
-    Post.find()
-    
+    Post.find({'$or': {'id.equals': 5, 'body.like': '%body 7'}}, callback)
+
+####Order, offset, limit
+
+    Post.find({}, { order: ['-id'] }, callback)
+    Post.find({}, { offset: 1, limit: 1 }, callback)
+
 ####Count:
 
 find:
@@ -230,6 +235,22 @@ find:
 outputs:
 
     { count: 3 }
+
+##Update
+
+    Post.update(
+      { title: 'Some Title 6' },
+      { title: 'Renamed title' },
+      callback
+    )
+
+##Delete
+
+    Post.destroy({ 'id.in': [5, 7]}, callback)
+    
+##A Taste of Relationships
+
+
 
 ##ToDo
 
