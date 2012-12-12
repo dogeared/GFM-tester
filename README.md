@@ -156,13 +156,43 @@ In the case of MySQL, the ```results``` will be an object of the form:
 
 The various forms of the ```find``` command are very flexible. We'll present a few of them here.
 
-####By primary key
+####All:
+
+find:
+
+    Post.find({}, callback)
+    
+outputs:
+
+    [ { id: 5,
+        title: 'Some Title 5',
+        blurb: null,
+        body: 'Some body 5',
+        published: null,
+        created_at: null,
+        updated_at: null },
+      { id: 6,
+        title: 'Some Title 6',
+        blurb: null,
+        body: 'Some body 6',
+        published: null,
+        created_at: null,
+        updated_at: null },
+      { id: 7,
+        title: 'Some Title 7',
+        blurb: null,
+        body: 'Some body 7',
+        published: null,
+        created_at: null,
+        updated_at: null } ]
+
+####By primary key:
 
 find:
 
     Post.find(6, callback)
 
-returns:
+outputs:
 
     { 
       id: 6,
@@ -174,13 +204,32 @@ returns:
       updated_at: null 
     }
     
+####Only show some fields:
+    
 find:
 
     Post.find(6, {only: ['id','title']}, callback)
 
-returns:
+outputs:
 
     { id: 6, title: 'Some Title 6' }
+
+####Some clauses:
+
+    Post.find({'title.like': 'Some%'}, callback)
+    Post.find({'id.in': [6, 7]}, callback)
+    Post.find({'id.nin': [6]}, callback)
+    Post.find()
+    
+####Count:
+
+find:
+
+    Post.find({}, {count: true}, callback)
+
+outputs:
+
+    { count: 3 }
 
 ##ToDo
 
