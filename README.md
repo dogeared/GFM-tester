@@ -9,7 +9,9 @@ PostgreSQL ORM on top of node-postgres.
 
 ##Quickstart
 
-**NOTE:** As of version```0.2.0```, both PostgreSQL and MySQL are supported. You indicate which database you are using at object instantiation time. All other operations and interfaces behave the same as older versions.
+**NOTE:** As of version```0.2.0```, both PostgreSQL and MySQL are supported. 
+You indicate which database you are using at object instantiation time. All 
+other operations and interfaces behave the same as older versions.
 
 ### Setup for versions < ```0.2.0```
 
@@ -58,11 +60,18 @@ PostgreSQL ORM on top of node-postgres.
       primaryKey: 'id'
     });
 
-    Post.create({ title: 'Some Title 1', body: 'Some body 1' }, function(err, results) {
-      Post.find({ 'title.ilike': '%title%' }, { only: ['id', 'body'] }, function(err, post) {
-        // Hooray!
-      });
-    });
+    Post.create(
+      { title: 'Some Title 1', body: 'Some body 1' }, 
+      function(err, results) {
+        Post.find(
+          { 'title.ilike': '%title%' }, 
+          { only: ['id', 'body'] }, 
+          function(err, post) {
+            // Hooray!
+          }
+        );
+      }
+    );
 
 #The Full Monty
 
@@ -89,6 +98,43 @@ The following examples use these database tables as examples:
 |  6 |       3 | Comment 6 | 2012-12-11 |
 |  7 |       4 | Comment 7 | 2012-12-11 |
 |  8 |       4 | Comment 8 | 2012-12-11 |
+
+---------------------------------
+
+### students
+
+| id | name      |
+|----|-----------|
+| 1  | Abe       |
+| 2  | Ben       |
+| 3  | Christine |
+| 4  | Delia     |
+| 5  | Egwene    |
+
+### professors
+
+| id | name   |
+|----|--------|
+| 6  | Felix  |
+| 7  | Garret |
+| 8  | Horton |
+| 9  | Irene  |
+| 10 | Jane   |
+
+### student_professor
+
+| student_id | professor_id |
+|------------|--------------|
+| 1          | 6            |
+| 2          | 6            |
+| 3          | 7            |
+| 4          | 7            |
+| 5          | 8            |
+| 1          | 8            |
+| 2          | 9            |
+| 3          | 9            |
+| 4          | 10           |
+| 5          | 10           |
 
 Given this setup:
 
@@ -136,7 +182,8 @@ Calls to ```create``` can take an object or an array of objects.
       callback
     )
 
-The ```results``` passed to the callback are different depending on the database.
+The ```results``` passed to the callback are different depending on the 
+database.
 
 In the case of PostgreSQL, the ```results``` will be an object of the form:
 
@@ -164,7 +211,8 @@ In the case of MySQL, the ```results``` will be an object of the form:
 
 ##Read
 
-The various forms of the ```find``` command are very flexible. We'll present a few of them here.
+The various forms of the ```find``` command are very flexible. We'll present a 
+few of them here.
 
 ####All:
 
@@ -313,11 +361,67 @@ outputs:
       ...
     ]
 
+Here's a many-to-many example based on the Student and Professor tables above:
+
+    var Student = FastLegS.Base.extend({
+      tableName: 'students',
+      primaryKey: 'id',
+    });
+
+    var Professor = FastLegS.Base.extend({
+      tableName: 'professors',
+      primaryKey: 'id',
+    })
+
+    var StudentProfessor = FastLegS.Base.extend({
+      tableName: 'student_professor',
+      foreignKeys: [
+         { model: Student, key: 'student_id' },
+         { model: Professor, key: 'professor_id' }
+      ]
+    })
+
+    Student.many = [{
+      professors: Professor,
+      assoc: StudentProfessor
+    }]
+
+    Professor.many = [{
+      students: Student,
+      assoc: StudentProfessor
+    }]
+
+    Professor.findOne(
+      9,
+      {include: { students: {} }},
+      function(err, result) {
+        inspect(result)
+      }
+    )
+
+outputs:
+
+    {
+      id: 9,
+      name: 'Irene',
+      students: [
+          { id: 2, name: 'Ben' },
+          { id: 3, name: 'Christine' }
+      ]
+    }
+
+This shows that ```professor``` Irene has ```students``` Ben and Christine
+
 ##Summary
 
-The tests are an excellent reference for the various modifiers and syntactic
+The tests are an excellent reference for the various modifiers and syntactic 
 sugar you can use in FastLegS.
 
 ##ToDo
 
-Watch for updates to examples in the near future to show features like relationships and advanced queries.
+Right now, the codebase is split because of syntactic differences between 
+PostgreSQL and MySQL. There is a lot of duplicated code, however. Future 
+versions should abstract out the differences and merge the duplicated code.
+
+Watch for updates to examples in the near future to show features like 
+relationships and advanced queries.
