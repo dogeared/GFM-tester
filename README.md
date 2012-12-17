@@ -99,43 +99,6 @@ The following examples use these database tables as examples:
 |  7 |       4 | Comment 7 | 2012-12-11 |
 |  8 |       4 | Comment 8 | 2012-12-11 |
 
----------------------------------
-
-### students
-
-| id | name      |
-|----|-----------|
-| 1  | Abe       |
-| 2  | Ben       |
-| 3  | Christine |
-| 4  | Delia     |
-| 5  | Egwene    |
-
-### professors
-
-| id | name   |
-|----|--------|
-| 6  | Felix  |
-| 7  | Garret |
-| 8  | Horton |
-| 9  | Irene  |
-| 10 | Jane   |
-
-### student_professor
-
-| student_id | professor_id |
-|------------|--------------|
-| 1          | 6            |
-| 2          | 6            |
-| 3          | 7            |
-| 4          | 7            |
-| 5          | 8            |
-| 1          | 8            |
-| 2          | 9            |
-| 3          | 9            |
-| 4          | 10           |
-| 5          | 10           |
-
 Given this setup:
 
     var FastLegSBase = require('FastLegS');
@@ -361,7 +324,43 @@ outputs:
       ...
     ]
 
-Here's a many-to-many example based on the Student and Professor tables above:
+Here's a many-to-many example based on these tables:
+
+### students
+
+| id | name      |
+|----|-----------|
+| 1  | Abe       |
+| 2  | Ben       |
+| 3  | Christine |
+| 4  | Delia     |
+| 5  | Egwene    |
+
+### professors
+
+| id | name   |
+|----|--------|
+| 6  | Felix  |
+| 7  | Garret |
+| 8  | Horton |
+| 9  | Irene  |
+| 10 | Jane   |
+
+### student_professor
+
+| student_id | professor_id |
+|------------|--------------|
+| 1          | 6            |
+| 2          | 6            |
+| 3          | 7            |
+| 4          | 7            |
+| 5          | 8            |
+| 1          | 8            |
+| 2          | 9            |
+| 3          | 9            |
+| 4          | 10           |
+| 5          | 10           |
+
 
     var Student = FastLegS.Base.extend({
       tableName: 'students',
