@@ -22,7 +22,7 @@ This project uses the [peanut] function testing tool for node.js
 
 The tests that are included are meant to get you familiar with the Trello API using the [node-trello] project.
 
-[peaut]: https://github.com/didit-tech/peanut
+[peanut]: https://github.com/didit-tech/peanut
 [node-trello]: https://github.com/adunkman/node-trello
 
 Take a look at the code in: ```features/step_definitions``` to see what is going on in each scenario from ```features/trello.feature```
